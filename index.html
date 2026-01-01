@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 Happy New Year 2026 🎉</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:radial-gradient(circle at top,#2b0055,#000);
+  color:white;
+}
+
+/* ENTRY SCREEN */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  animation:fadeOut 3s forwards;
+  animation-delay:2.5s;
+}
+
+#overlay h1{
+  font-size:3rem;
+  animation:zoom 2s infinite;
+}
+
+@keyframes zoom{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.25);}
+}
+
+@keyframes fadeOut{
+  to{opacity:0;visibility:hidden;}
+}
+
+/* NAME MODAL */
+#nameBox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:15;
+}
+
+.name-card{
+  background:linear-gradient(135deg,#4b0082,#000);
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 0 30px hotpink;
+  animation:pop 1s;
+}
+
+@keyframes pop{
+  from{transform:scale(0);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+.name-card h2{
+  margin-bottom:15px;
+}
+
+.name-card input{
+  padding:12px;
+  width:220px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  text-align:center;
+  font-size:1rem;
+}
+
+.name-card button{
+  margin-top:15px;
+  padding:10px 25px;
+  border:none;
+  border-radius:25px;
+  background:hotpink;
+  color:white;
+  font-size:1rem;
+  cursor:pointer;
+}
+
+.name-card button:hover{
+  background:gold;
+  color:black;
+}
+
+/* MAIN CONTENT */
+.container{
+  text-align:center;
+  padding-top:80px;
+  position:relative;
+  z-index:2;
+}
+
+h1{
+  font-size:clamp(2.5rem,6vw,5rem);
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px gold;}
+  to{text-shadow:0 0 45px hotpink;}
+}
+
+#name{
+  color:#00ffd5;
+}
+
+#countdown{
+  font-size:2rem;
+  margin:20px 0;
+}
+
+.message{
+  font-size:1.3rem;
+  opacity:0.9;
+}
+
+/* CREATOR */
+.creator{
+  position:fixed;
+  bottom:15px;
+  width:100%;
+  text-align:center;
+  font-size:0.9rem;
+  opacity:0.75;
+}
+
+/* FIREWORKS */
+.firework{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  box-shadow:0 0 20px gold;
+  animation:explode 2s infinite;
+}
+
+@keyframes explode{
+  0%{transform:scale(0);opacity:1;}
+  100%{transform:scale(30);opacity:0;}
+}
+
+/* PARTICLES */
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:white;
+  opacity:0.8;
+  animation:float 10s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
+}
+
+/* CANVAS */
+canvas{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  h1{font-size:2.5rem;}
+  #countdown{font-size:1.5rem;}
+}
+</style>
+</head>
+
+<body>
+
+<div id="overlay">
+  <h1>✨ Something Special for You ✨</h1>
+</div>
+
+<div id="nameBox">
+  <div class="name-card">
+    <h2>🎉 Welcome 🎉</h2>
+    <p>Enter your beautiful name</p><br>
+    <input id="username" placeholder="Your Name">
+    <br>
+    <button onclick="start()">Continue</button>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+  <h1>🎆 Happy New Year 2026 🎆</h1>
+  <h2>Dear <span id="name"></span> ❤️</h2>
+  <div id="countdown"></div>
+  <p class="message">
+    May your year be full of happiness,<br>
+    success, love & unlimited victories ✨🚀
+  </p>
+</div>
+
+<div class="creator">
+  Created with ❤️ by <b>ANKIT KUMAR</b>
+</div>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+/* START EXPERIENCE */
+function start(){
+  let n=document.getElementById("username").value || "Friend";
+  document.getElementById("name").innerText=n;
+  document.getElementById("nameBox").style.display="none";
+  document.getElementById("music").play();
+}
+
+/* COUNTDOWN */
+const target=new Date("Jan 1, 2026 00:00:00").getTime();
+setInterval(()=>{
+  const now=new Date().getTime();
+  let diff=target-now;
+
+  if(diff<=0){
+    document.getElementById("countdown").innerHTML="🎇 Welcome 2026 🎇";
+    blast();
+    return;
+  }
+
+  let d=Math.floor(diff/(1000*60*60*24));
+  let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  let m=Math.floor((diff%(1000*60*60))/(1000*60));
+  let s=Math.floor((diff%(1000*60))/1000);
+
+  document.getElementById("countdown").innerHTML=
+  `⏳ ${d}d ${h}h ${m}m ${s}s`;
+},1000);
+
+/* CONFETTI */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let pieces=[];
+for(let i=0;i<200;i++){
+  pieces.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*6+2
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="gold";
+  pieces.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.y+=2;
+    if(p.y>canvas.height)p.y=0;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* FIREWORKS LOOP */
+function blast(){
+  for(let i=0;i<10;i++){
+    let f=document.createElement("div");
+    f.className="firework";
+    f.style.top=Math.random()*100+"%";
+    f.style.left=Math.random()*100+"%";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),2000);
+  }
+}
+setInterval(blast,2500);
+
+/* FLOATING PARTICLES */
+for(let i=0;i<50;i++){
+  let p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"%";
+  p.style.animationDuration=(Math.random()*10+5)+"s";
+  document.body.appendChild(p);
+}
+</script>
+
+</body>
+</html>
